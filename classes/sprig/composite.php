@@ -4,8 +4,9 @@ abstract class Sprig_Composite extends Sprig
 {
 	protected function __construct()
 	{
-		if(self::VERSION != '1.1.1') {
-			throw new Exception('Unsupported Sprig version');
+		$required_version = '1.2';
+		if(self::VERSION != $required_version) {
+			throw new Exception('Unsupported Sprig version. Sprig composite requires '.$required_version);
 		}
 		
 		foreach ($this->_fields as $name => $field)
