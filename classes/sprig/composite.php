@@ -83,12 +83,29 @@ abstract class Sprig_Composite extends Sprig
 							else
 							{
 								// TODO this needs testing
-								// TOOD: composite PK support
-								$wrapped = array_map(
-									array($model->field($model->pk()),'_database_wrap'),
-									$value);
-								$query = DB::select()
-									->where($model->pk(), 'IN', $wrapped);
+								
+								if(is_array($model->pk())) {
+									// -> Composite primary key
+									foreach($model->pk() as $pk) {
+										$pk_value = array();
+										foreach($value as $this_value) {
+											$pk_value[] = $this_value[$pk];
+										}
+										$wrapped = array_map(
+											array($model->field($pk),'_database_wrap'),$pk_value);
+										$query = DB::select()
+											->where($pk, 'IN', $wrapped);
+									}
+										f::debug_printvar($query->__toString());
+								}
+								else {
+									// -> Not composite primary key
+									$wrapped = array_map(
+										array($model->field($model->pk()),'_database_wrap'),
+										$value);
+									$query = DB::select()
+										->where($model->pk(), 'IN', $wrapped);
+								}
 							}
 						}
 						else
