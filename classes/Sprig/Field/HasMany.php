@@ -127,7 +127,7 @@ class Sprig_Field_HasMany extends Sprig_Field_ForeignKey {
 		$inputs = array();
 		foreach ($options as $id => $label)
 		{
-			$inputs[] = '<label>'.Form::checkbox("{$name}[]", $id, isset($value[$id])).' '.html::chars($label).'</label>';
+			$inputs[] = '<label>'.Form::checkbox("{$name}[]", $id, isset($value[$id])).' '.HTML::chars($label).'</label>';
 		}
 
 		// Hidden input is added to force $_POST to contain a value for
