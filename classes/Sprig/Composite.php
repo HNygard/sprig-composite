@@ -27,7 +27,7 @@ abstract class Sprig_Composite extends Sprig
 	 * Get the value of a field.
 	 *
 	 * @throws  Sprig_Exception  field does not exist
-	 * @param   string  field name
+	 * @param   string  $name  field name
 	 * @return  mixed
 	 */
 	public function __get($name)
@@ -319,11 +319,13 @@ abstract class Sprig_Composite extends Sprig
 	 * Set the value of a field.
 	 *
 	 * @throws  Sprig_Exception  field does not exist
-	 * @param   string  field name
-	 * @param   mixed   new field value
+	 * @param   string  $name   field name
+	 * @param   mixed   $value  new field value
 	 * @return  void
+     * @throws Kohana_Exception
+     * @throws Sprig_Exception
 	 */
-	public function __set($name, $value)
+    public function __set($name, $value)
 	{
 		if ( ! $this->_init)
 		{
@@ -590,7 +592,7 @@ abstract class Sprig_Composite extends Sprig
 	 * Returns array if primary key is composite PK (multiple PKs), returns
 	 * string if there is only one PK and returns null if there is no PKs.
 	 *
-	 * @param   string  table name, TRUE for the model table
+	 * @param   string  $table  table name, TRUE for the model table
 	 * @return  mixed   null, string, array
 	 */
 	public function pk($table = NULL)
@@ -627,7 +629,7 @@ abstract class Sprig_Composite extends Sprig
 	 * 
 	 * Returns empty array if primary key is null
 	 *
-	 * @param   string  table name, TRUE for the model table
+	 * @param   string  $table  table name, TRUE for the model table
 	 * @return  array
 	 */
 	public function pk_as_array ($table = NULL)
@@ -645,7 +647,7 @@ abstract class Sprig_Composite extends Sprig
 	/**
 	 * Return the columns each primary key has got
 	 * 
-	 * @param   string  table name, TRUE for the model table
+	 * @param   string  $table  table name, TRUE for the model table
 	 * @uses    pk()
 	 * @return  array
 	 */
@@ -665,7 +667,7 @@ abstract class Sprig_Composite extends Sprig
 	 * Returns array if primary key is composite PK (multiple PKs), returns
 	 * string if there is only one PK and returns null if there is no PKs.
 	 *
-	 * @param   string  table name, TRUE for the model table
+	 * @param   string  $table  table name, TRUE for the model table
 	 * @return  mixed   null, string, array
 	 */
 	public function fk($table = NULL)
@@ -704,7 +706,7 @@ abstract class Sprig_Composite extends Sprig
 	 * 
 	 * Returns empty array if foreign key is null
 	 *
-	 * @param   string  table name, TRUE for the model table
+	 * @param   string  $table  table name, TRUE for the model table
 	 * @return  array
 	 */
 	public function fk_as_array ($table = NULL)
@@ -827,6 +829,7 @@ abstract class Sprig_Composite extends Sprig
 		{
 			foreach ($relations as $name => $value)
 			{
+                /* @var $field Sprig_Field_ManyToMany */
 				$field = $this->_fields[$name];
 
 				if ( isset($field->foreign_key) AND $field->foreign_key)
@@ -962,6 +965,7 @@ abstract class Sprig_Composite extends Sprig
 			{
 				foreach ($relations as $name => $value)
 				{
+                    /* @var $field Sprig_Field_ManyToMany */
 					$field = $this->_fields[$name];
 
 					$model = Sprig::factory($field->model);
@@ -1082,10 +1086,12 @@ abstract class Sprig_Composite extends Sprig
 	
 	/**
 	 * Array diff for composite keys (array of arrays)
-	 * 
+	 *
+     * @param $array1
+     * @param $array2
 	 * @return array Returns multidim array of those arrays in array1 that isn't in array2 
 	 */
-	public static function array_diff2($array1, $array2)
+    public static function array_diff2($array1, $array2)
 	{
 		$notdiff_found_array1 = array();
 		$notdiff_found_array2 = array();
