@@ -507,7 +507,7 @@ abstract class Sprig_Composite extends Sprig
 		// Get the correct type of value
 		$changed = $field->value($value);
 
-		if (isset($field->hash_with) AND $changed)
+		if ($field instanceof Sprig_Field_Password && isset($field->hash_with) AND $changed)
 		{
 			$changed = call_user_func($field->hash_with, $changed);
 		}
