@@ -13,7 +13,7 @@ abstract class Sprig_Composite extends Sprig
 		{
 			if ( is_array ($field->column))
 			{
-				$field->column = $field->column[0];
+				$field->column = $field->column[0];
 			}
 		}
 		
