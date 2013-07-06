@@ -688,14 +688,14 @@ abstract class Sprig_Composite extends Sprig
 		// Single pk
 		if(is_string($this->_primary_key))
 		{
-			return $table.$this->_model.'_'.$this->_primary_key;
+			return $table.strtolower($this->_model).'_'.$this->_primary_key;
 		}
 
 		// Composite pk
 		$keys = array();
 		foreach ($this->_primary_key as $pk)
 		{
-			$keys[] = $table.$this->_model.'_'.$pk;
+			$keys[] = $table.strtolower($this->_model).'_'.$pk;
 		}
 
 		return $keys;
