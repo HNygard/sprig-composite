@@ -1122,13 +1122,13 @@ abstract class Sprig_Composite extends Sprig
 	/**
 	 * Callback for validating unique fields.
 	 *
-	 * @param   object  Validate array
-	 * @param   string  field name
-	 * @return  void
+	 * @param   mixed   $field_value
+	 * @param   string  $field_name
+	 * @return  bool
 	 */
-	public function _unique_field(Validate $array, $field)
+	public function _unique_field($field_value, $field_name)
 	{
-		if ($array[$field])
+		if ($field_value)
 		{
 			$query = DB::select();
 			
@@ -1139,16 +1139,17 @@ abstract class Sprig_Composite extends Sprig
 			$query
 				->from($this->_table)
 				->where(
-					$this->_fields[$field]->column,
+					$this->_fields[$field_name]->column,
 					'=',
-					$this->_fields[$field]->_database_wrap($array[$field]));
+					$this->_fields[$field_name]->_database_wrap($field_value));
 			$query = $query
 				->execute($this->_db);
 
 			if (count($query))
 			{
-				$array->error($field, 'unique');
+                return false;
 			}
 		}
+        return true;
 	}
 }
